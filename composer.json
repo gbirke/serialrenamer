@@ -8,8 +8,15 @@
     },
     "require": {
         "silex/silex": "~1.2",
-         "twig/twig": ">=1.8,<2.0-dev"
+         "twig/twig": ">=1.8,<2.0-dev",
+         "moinax/tvdb": "dev-zip_download"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/gbirke/TvDb"
+        }
+    ],
     "license": "MIT",
     "authors": [
         {

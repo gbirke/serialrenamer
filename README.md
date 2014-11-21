@@ -16,6 +16,6 @@ to install the necessary dependencies.
 ## Usage
 To run the program with the builtin web server on Port 8080, use the following command:
 
-	php -S localhost:8080 web/index.php
+	php -S localhost:8080 -t web web/index.php
 
 

@@ -4,8 +4,50 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3a37531866b766af6df2301554fa5346",
+    "hash": "17697fb0b89d3f71702e85d1fe3cdbb0",
     "packages": [
+        {
+            "name": "moinax/tvdb",
+            "version": "dev-zip_download",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gbirke/TvDb.git",
+                "reference": "74dd75080bd212ff54b430ebfb3365386870c71d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gbirke/TvDb/zipball/74dd75080bd212ff54b430ebfb3365386870c71d",
+                "reference": "74dd75080bd212ff54b430ebfb3365386870c71d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Moinax\\TvDb": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Moinax",
+                    "email": "moinax@gmail.com"
+                }
+            ],
+            "description": "PHPTVDB is a PHP library for accessing TV show information such as episodes, actors, showtimes and descriptions.",
+            "homepage": "http://moinax.github.io/TvDb/",
+            "keywords": [
+                "API"
+            ],
+            "support": {
+                "source": "https://github.com/gbirke/TvDb/tree/zip_download"
+            },
+            "time": "2014-11-21 22:34:05"
+        },
         {
             "name": "pimple/pimple",
             "version": "v1.1.1",
@@ -538,7 +580,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "moinax/tvdb": 20
+    },
     "prefer-stable": false,
     "platform": [],
     "platform-dev": []
