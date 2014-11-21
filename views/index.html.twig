@@ -1,4 +1,20 @@
 {% extends "base.html.twig" %}
 {% block body %}
-	Hello {{name}}
+	<nav class="dirlist">
+		Current Path: <a href="{{app.url_generator.generate("path", {"newpath": "/"}) }}">&lt;root&gt;</a>
+		{% for path, name in parents %}
+			/ <a href="{{app.url_generator.generate("path", {"newpath": path})}}">{{name}}</a>
+		{% endfor %}
+	</nav>
+	<br>
+	<div class="dirlist">
+		{% for path, name in dirsInPath %}
+			
+			<a href="{{app.url_generator.generate("path", {"newpath": path}) }}">[{{name}}]</a><br />
+		{% endfor %}
+		
+		{% for f in filesInPath %}
+			{{f}}<br />
+		{% endfor %}
+	</div>
 {% endblock %}

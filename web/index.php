@@ -1,25 +1,8 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
+$filename = __DIR__.preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
+if (php_sapi_name() === 'cli-server' && is_file($filename)) {
+    return false;
+}
 
-use Silex\Application;
-
-$app = new Application();
-
-// Service provider
-$app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/../views',
-));
-
-// Controllers
-
-
-$app->get('/', function (Application $app) {
-    return $app['twig']->render('index.html.twig', array(
-        'name' =>"World",
-    ));
-});
-
-
-
+$app = require __DIR__.'/../src/app.php';
 $app->run();
