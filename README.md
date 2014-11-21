@@ -1,4 +1,4 @@
 serialrenamer
 =============
 
-Web-based TV series renamer unsing theTVDB
+Web-based TV series renamer using theTVDB

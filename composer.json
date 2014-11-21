@@ -1,0 +1,15 @@
+{
+    "name": "gbirke/serialrenamer",
+    "description": "Web based renaming of TV series",
+    "require": {
+        "silex/silex": "~1.2",
+         "twig/twig": ">=1.8,<2.0-dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gabriel Birke",
+            "email": "gb@birke-software.de"
+        }
+    ]
+}
