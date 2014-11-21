@@ -14,7 +14,7 @@ class DirectoryInfo {
 	public function getInfo() {
 		$files = new \DirectoryIterator($this->path ? $this->path : "/");
 		$filesInPath = $dirsInPath = [];
-		$pathRel = substr($this->path, 1);
+		$pathRel = $this->getPathRel();
 		foreach ($files as $f) {
 			if ($f->isDir()) {
 				$name = $f->getFilename();
@@ -29,25 +29,32 @@ class DirectoryInfo {
 			elseif ($f->isFile()) {
 				$filesInPath[] = $f->getFilename();
 			}
-			
 		}
+
+		return [
+	    	'filesInPath' => $filesInPath,
+	    	'dirsInPath'  => $dirsInPath,
+	    	'currentPath' => $this->path,
+	    	'parents'     => $this->getParents()
+	    ];
+	}
+
+	public function getParents() {
 		$parents = [];
 		$path = "";
 		if ($this->path != "/") {
-			foreach(explode("/", $pathRel) as $part) {
+			foreach(explode("/", $this->getPathRel()) as $part) {
 				$parents[$path."/".$part] = $part;
 			}
 		}
 		else {
 			$parents = [];
 		}
+		return $parents;
+	}
 
-		return [
-	    	'filesInPath' => $filesInPath,
-	    	'dirsInPath'  => $dirsInPath,
-	    	'this->path' => $this->path,
-	    	'parents'     => $parents
-	    ];
+	protected function getPathRel() {
+		return substr($this->path, 1);
 	}
 
 	protected function getDestination($pathRel, $name) {
