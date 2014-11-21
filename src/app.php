@@ -1,4 +1,6 @@
 <?php
+namespace Birke\Serialrenamer;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Silex\Application;
@@ -9,9 +11,9 @@ $app = new Application();
 $app["debug"] = true;
 
 // Service providers
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-$app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
+$app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
+$app->register(new \Silex\Provider\SessionServiceProvider());
+$app->register(new \Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
 
@@ -33,43 +35,9 @@ $app->get('path/{newpath}', function(Application $app, $newpath){
 // Main view
 $app->get('/', function (Application $app) {
 	$currentPath = $app['session']->get("currentPath", "");
-	$files = new DirectoryIterator($currentPath ? $currentPath : "/");
-	$filesInPath = $dirsInPath = [];
-	$currentPathRel = substr($currentPath, 1);
-	foreach ($files as $f) {
-		if ($f->isDir()) {
-			$name = $f->getFilename();
-			if ($name == ".") {
-				continue;
-			}
-			if (!$currentPathRel && $name == "..") {
-				continue;
-			}
-			
-			$dirsInPath[$currentPathRel."/".$name] = $name;
-		}
-		elseif ($f->isFile()) {
-			$filesInPath[] = $f->getFilename();
-		}
-		
-	}
-	$parents = [];
-	$path = "";
-	if ($currentPath != "/") {
-		foreach(explode("/", $currentPathRel) as $part) {
-			$parents[$path."/".$part] = $part;
-		}
-	}
-	else {
-		$parents = [];
-	}
+	$dirInfo = new DirectoryInfo($currentPath);
 
-    return $app['twig']->render('index.html.twig', [
-    	'filesInPath' => $filesInPath,
-    	'dirsInPath'  => $dirsInPath,
-    	'currentPath' => $currentPath,
-    	'parents'     => $parents
-    ]);
+    return $app['twig']->render('index.html.twig', $dirInfo->getInfo());
 });
 
 return $app;
