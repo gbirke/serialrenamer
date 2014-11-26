@@ -39,6 +39,29 @@ class DirectoryInfo {
 	    ];
 	}
 
+	public function getFolders() {
+		$files = new \DirectoryIterator($this->path);
+		$folders = [];
+		$pathRel = $this->getPathRel();
+		foreach ($files as $f) {
+			if ($f->isDir()) {
+				$name = $f->getFilename();
+				if ($name == ".") {
+					continue;
+				}
+				if (null === ($destination = $this->getDestination($pathRel, $name))) {
+					continue;
+				}
+				$folders[] = [
+					'id' => $f->getPathname(),
+					'name' =>  $name,
+					'destination' => $destination
+				];
+			}
+		}
+		return $folders;	
+	}
+
 	public function getParents() {
 		$parents = [];
 		$path = "";

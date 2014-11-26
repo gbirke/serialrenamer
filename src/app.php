@@ -18,8 +18,8 @@ $app["tvdb_client"] = function($app) {
 	 if(!$app['tvdb_client']) {
 	 	throw new \RuntimeException("TVDB_API_KEY not specified in environment!");
 	 }
-	 return new \Moinax\TvDb\Client($app["tvdb_url", $app["tvdb_api_key"]);
-}
+	 return new \Moinax\TvDb\Client($app["tvdb_url"], $app["tvdb_api_key"]);
+};
 
 // Service providers
 $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
@@ -43,6 +43,23 @@ $app->get('/path/{newpath}', function(Application $app, $newpath){
 ->assert("newpath", ".*")
 ->bind("path");
 
+// Switching paths
+$app->get('/folder/{name}', function(Application $app, $name){
+	if (!$name  || $name[0] != "/") {
+		$name = "/" . $name;
+	}
+	if (file_exists($name)) {
+		$dirInfo = new DirectoryInfo($name);
+		return $app->json($dirInfo->getFolders());
+	}
+	else {
+		return $app->json(['msg' => 'Unknown path.'], 500);
+	}
+})
+->assert("name", ".*")
+->bind("folder");
+
+
 // Search for series
 $app->post("/search", function(Application $app, Request $req){
 	$q = $req->get("q");
@@ -52,7 +69,7 @@ $app->post("/search", function(Application $app, Request $req){
 
 	$currentPath = $app['session']->get("currentPath", "");
 	$dirInfo = new DirectoryInfo($currentPath);
-	$data = $dirInfo->getInfo()
+	$data = $dirInfo->getInfo();
 
 	$app["session"]->set("searchresult", $app["tvdb_client"]->getSeries($q));
 
