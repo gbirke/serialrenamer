@@ -1,9 +1,12 @@
 var React = require('react');
 var FileStore = require('../stores/FileStore');
+var FileEntry = require('./FileEntry.react');
+var FolderEntry = require('./FolderEntry.react');
 
 function getFileState() {
     return {
-        files: FileStore.getAll()
+        files: FileStore.getFiles(),
+        folders: FileStore.getFolders()
     };
 }
 
@@ -33,10 +36,14 @@ var FileBrowser = React.createClass({
    */
   render: function() {
     var files = this.state.files.map(function(file){
-        return (<div key={file.name}>{file.name}</div>)
+        return (<FileEntry key={file.name} entry={file} />)
+    });
+    var folders = this.state.folders.map(function(folder){
+        return (<FolderEntry key={folder.name} entry={folder} />)
     });
     return (
       <section className="filelist">
+        {folders}
         {files}
       </section>
     );

@@ -16,6 +16,14 @@ var FileStore = assign({}, EventEmitter.prototype, {
         return _files;
     },
 
+    getFiles: function() {
+        return _files.filter(function(file) { return file.type == "f"; });
+    },
+
+    getFolders: function() {
+        return _files.filter(function(file) { return file.type == "d"; });
+    },
+
     emitChange: function() {
         this.emit(CHANGE_EVENT);
     },

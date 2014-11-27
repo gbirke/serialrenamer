@@ -9,6 +9,7 @@ React.render(
 
 // load dummy data
 FileActions.loadFiles([
-    {name:"usr"},
-    {name:"var"}
+    {name:"usr", "type": "d"},
+    {name:"var", "type": "d"},
+    {name:"README", "type": "f"}
 ]);
