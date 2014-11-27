@@ -2,14 +2,11 @@ var React = require('react');
 var FileBrowser = require('./components/FileBrowser.react');
 var FileActions = require('./actions/FileActions');
 
+var mainElement = document.getElementById("main");
+
 React.render(
     <FileBrowser />, 
-    document.getElementById("main")
+    mainElement
 );
 
-// load dummy data
-FileActions.loadFiles([
-    {name:"usr", "type": "d"},
-    {name:"var", "type": "d"},
-    {name:"README", "type": "f"}
-]);
+FileActions.loadFiles(JSON.parse(main.dataset.files));

@@ -1,4 +1,3 @@
 {% extends "base.html.twig" %}
-{% block body %}
-	
-{% endblock %}
+{% block data_files %}{{ data_files|json_encode() }}{% endblock %}
+

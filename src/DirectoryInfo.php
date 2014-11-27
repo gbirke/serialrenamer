@@ -5,70 +5,48 @@ namespace Birke\Serialrenamer;
 class DirectoryInfo {
 
 	protected $path;
+	protected $root;
 
-	public function __construct($path) 
+	public function __construct($path, $root) 
 	{
 		$this->path = $path;
+		$this->root = $root;
 	}
 
-	public function getInfo() {
-		$files = new \DirectoryIterator($this->path ? $this->path : "/");
-		$filesInPath = $dirsInPath = [];
-		$pathRel = $this->getPathRel();
-		foreach ($files as $f) {
+	public function getFiles() {
+		$fullPath = $this->root . $this->path;
+		error_log("fp=$fullPath");
+		if (!file_exists($fullPath)) {
+			throw new InvalidPathException("Path $this->path does not exist.");
+		}
+		$files = [];
+		foreach (new \DirectoryIterator($fullPath) as $f) {
+			$name = $f->getFilename();
+			$info = [
+				"name" => $name,
+				"id" => $this->path ? $this->path . "/" . $name : $name
+			];
 			if ($f->isDir()) {
-				$name = $f->getFilename();
 				if ($name == ".") {
 					continue;
 				}
-				if (null === ($destination = $this->getDestination($pathRel, $name))) {
+				// Skip "directory up" on root path
+				if ($name == ".." && !$this->path) {
 					continue;
 				}
-				$dirsInPath[$destination] = $name;
+				$info["path"] = $this->path;
+				$info["type"] = "d";
 			}
 			elseif ($f->isFile()) {
-				$filesInPath[] = $f->getFilename();
-			}
-		}
-
-		return [
-	    	'filesInPath' => $filesInPath,
-	    	'dirsInPath'  => $dirsInPath,
-	    	'currentPath' => $this->path,
-	    	'parents'     => $this->getParents()
-	    ];
-	}
-
-	public function getParents() {
-		$parents = [];
-		$path = "";
-		if ($this->path != "/") {
-			foreach(explode("/", $this->getPathRel()) as $part) {
-				$parents[$path."/".$part] = $part;
-			}
-		}
-		else {
-			$parents = [];
-		}
-		return $parents;
-	}
-
-	protected function getPathRel() {
-		return substr($this->path, 1);
-	}
-
-	protected function getDestination($pathRel, $name) {
-		$destination = $pathRel . "/" . $name;
-		if ($name == "..") {
-			if (!$pathRel) {
-				return null;
+				$info["type"] = "f";
 			}
 			else {
-				$destination = dirname($pathRel);
-				$destination = $destination ?: "/";
+				continue;
 			}
+			$files[] = $info;
 		}
-		return $destination;
+
+		return $files;
 	}
 
 }

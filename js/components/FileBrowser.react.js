@@ -36,10 +36,10 @@ var FileBrowser = React.createClass({
    */
   render: function() {
     var files = this.state.files.map(function(file){
-        return (<FileEntry key={file.name} entry={file} />)
+        return (<FileEntry key={file.id} entry={file} />)
     });
     var folders = this.state.folders.map(function(folder){
-        return (<FolderEntry key={folder.name} entry={folder} />)
+        return (<FolderEntry key={folder.id} entry={folder} />)
     });
     return (
       <section className="filelist">

@@ -13,6 +13,10 @@ $app["debug"] = true;
 $app["tvdb_url"] = "http://thetvdb.com";
 $app["tvdb_api_key"] = getenv("TVDB_API_KEY");
 
+// Starting folder, must always end with "/"
+// TODO: User environment variable, default to "/"
+$app["root_path"] = "/";
+
 // services
 $app["tvdb_client"] = function($app) {
 	 if(!$app['tvdb_client']) {
@@ -30,41 +34,40 @@ $app->register(new \Silex\Provider\TwigServiceProvider(), array(
 
 // Controllers
 
-// Switching paths
-$app->get('/path/{newpath}', function(Application $app, $newpath){
-	if ($newpath[0] != "/") {
-		$newpath = "/" . $newpath;
+// get files and folder for path
+$app->get('/path/{path}', function(Application $app, $path){
+	try {
+		$info = new DirectoryInfo($path, $app["root_path"]);
+		return $app->json($info->getFiles());	
 	}
-	if (file_exists($newpath)) {
-		$app['session']->set("currentPath", $newpath);	
+	catch(\Exception $e) {
+		return $app->json([
+			"error" => gettype($e),
+			"msg"   => $e->getMessage()
+		], 500);
 	}
-	return $app->redirect("/");
 })
-->assert("newpath", ".*")
+->assert("path", ".*")
 ->bind("path");
 
 // Search for series
 $app->post("/search", function(Application $app, Request $req){
 	$q = $req->get("q");
 	if(!$q) {
-		return $app->redirect("/");		
+		return $app->json(new stdClass);		
 	}
-
-	$currentPath = $app['session']->get("currentPath", "");
-	$dirInfo = new DirectoryInfo($currentPath);
-	$data = $dirInfo->getInfo();
 
 	$app["session"]->set("searchresult", $app["tvdb_client"]->getSeries($q));
 
-    return $app['twig']->render('index.html.twig', $data);
+    return $app->json($data);
 })->bind("search");
 
 // Main view
 $app->get('/', function (Application $app) {
-	$currentPath = $app['session']->get("currentPath", "");
-	$dirInfo = new DirectoryInfo($currentPath);
-
-    return $app['twig']->render('index.html.twig', $dirInfo->getInfo());
+	$info = new DirectoryInfo("", $app["root_path"]);
+    return $app['twig']->render('index.html.twig', [
+    	"data_files" => $info->getFiles()
+    ]);
 });
 
 return $app;
