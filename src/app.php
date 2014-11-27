@@ -42,8 +42,8 @@ $app->get('/path/{path}', function(Application $app, $path){
 	}
 	catch(\Exception $e) {
 		return $app->json([
-			"error" => gettype($e),
-			"msg"   => $e->getMessage()
+			"status" 	=> "error",,
+			"message"   => gettype($e) . ": " . $e->getMessage()
 		], 500);
 	}
 })
