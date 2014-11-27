@@ -1,26 +1,4 @@
 {% extends "base.html.twig" %}
 {% block body %}
-	<nav class="dirlist">
-		Current Path: <a href="{{app.url_generator.generate("path", {"newpath": "/"}) }}">&lt;root&gt;</a>
-		{% for path, name in parents %}
-			/ <a href="{{app.url_generator.generate("path", {"newpath": path})}}">{{name}}</a>
-		{% endfor %}
-	</nav>
-	<div>
-		{% if currentSeries is not defined %}
-			<form method="post" action="{{app.url_generator.generate("search")}}">
-				<label for="q">Search for: </label><input name="q" value="{{q|default('')}}" /><input type="submit" value="search" />
-			</form>
-		{% endif %}
-	</div>
-	<div class="dirlist">
-		{% for path, name in dirsInPath %}
-			
-			<a href="{{app.url_generator.generate("path", {"newpath": path}) }}">[{{name}}]</a><br />
-		{% endfor %}
-
-		{% for f in filesInPath %}
-			{{f}}<br />
-		{% endfor %}
-	</div>
+	
 {% endblock %}

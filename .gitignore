@@ -32,3 +32,10 @@
 
 # Composer PHAR
 /composer.phar
+
+# ignore node modules
+node_modules
+npm-debug.log
+
+# ignore compiled js library
+/web/js/app.js
