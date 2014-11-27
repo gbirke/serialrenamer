@@ -27,7 +27,7 @@ var CurrentPath = React.createClass({
 
         return (
             <div className="current-path filelist">
-                <span>Current Path:</span> {pathParts}
+                <span>Current Path:</span> <FolderEntry entry={rootData} /> {pathParts}
             </div>
         );
     }
