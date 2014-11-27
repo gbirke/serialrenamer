@@ -15,7 +15,6 @@ class DirectoryInfo {
 
 	public function getFiles() {
 		$fullPath = $this->root . $this->path;
-		error_log("fp=$fullPath");
 		if (!file_exists($fullPath)) {
 			throw new InvalidPathException("Path $this->path does not exist.");
 		}

@@ -42,7 +42,7 @@ $app->get('/path/{path}', function(Application $app, $path){
 	}
 	catch(\Exception $e) {
 		return $app->json([
-			"status" 	=> "error",,
+			"status" 	=> "error",
 			"message"   => gettype($e) . ": " . $e->getMessage()
 		], 500);
 	}
@@ -54,7 +54,7 @@ $app->get('/path/{path}', function(Application $app, $path){
 $app->post("/search", function(Application $app, Request $req){
 	$q = $req->get("q");
 	if(!$q) {
-		return $app->json(new stdClass);		
+		return $app->json(new stdClass);	
 	}
 
 	$app["session"]->set("searchresult", $app["tvdb_client"]->getSeries($q));

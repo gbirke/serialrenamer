@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var FileActions = require('../actions/FileActions');
 
 var FileEntry = React.createClass({
 
@@ -10,9 +11,13 @@ var FileEntry = React.createClass({
     render: function() {
         return (
             <div>
-                <a href="#">{this.props.entry.name}</a>
+                <a href="#" onClick={this._onChangePath} >{this.props.entry.name}</a>
             </div>
         );
+    },
+
+    _onChangePath: function() {
+        FileActions.getPath(this.props.entry.id)
     }
 });
 

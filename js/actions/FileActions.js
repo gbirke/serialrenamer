@@ -11,7 +11,16 @@ var FileActions = {
       actionType: FileConstants.FILES_LOADED,
       files: files
     });
+  },
+
+  getPath: function(path) {
+    AppDispatcher.handleViewAction({
+      actionType: FileConstants.GET_PATH,
+      path: path
+    });
   }
+
+
 
 };
 
