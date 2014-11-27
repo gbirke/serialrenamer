@@ -10,14 +10,24 @@ var FileEntry = React.createClass({
 
     render: function() {
         return (
-            <div>
+            <div className="folder-entry">
                 <a href="#" onClick={this._onChangePath} >{this.props.entry.name}</a>
             </div>
         );
     },
 
     _onChangePath: function() {
-        FileActions.getPath(this.props.entry.id)
+        var path = this.props.entry.path,
+            newPath = this.props.entry.id;
+        if (this.props.entry.name == "..") {
+            if (path.indexOf("/") == -1) {
+                newPath = "";
+            }
+            else {
+                newPath = path.substr(0, path.lastIndexOf("/"));
+            }
+        }
+        FileActions.changePath(newPath);
     }
 });
 

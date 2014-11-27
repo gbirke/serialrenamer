@@ -7,16 +7,18 @@ var assign        = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _files = [];
+var _currentPath = "";
 
 function setFiles(files) {
     _files = files;
 }
 
-function getPath(path) {
+function changePath(path) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/path/' + path, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
+            _currentPath = path;
             FileActions.loadFiles(JSON.parse(xhr.responseText));
         }
     };
@@ -35,6 +37,10 @@ var FileStore = assign({}, EventEmitter.prototype, {
 
     getFolders: function() {
         return _files.filter(function(file) { return file.type == "d"; });
+    },
+
+    getCurrentPath: function() {
+        return _currentPath;
     },
 
     emitChange: function() {
@@ -62,8 +68,8 @@ FileStore.dispatchToken = AppDispatcher.register(function(payload) {
         case FileConstants.FILES_LOADED:
             setFiles(action.files);
             break;
-        case FileConstants.GET_PATH:
-            getPath(action.path);
+        case FileConstants.FILES_CHANGE_PATH:
+            changePath(action.path);
             return true;
         default:
             return true;

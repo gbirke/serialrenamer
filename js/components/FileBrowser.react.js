@@ -2,11 +2,13 @@ var React = require('react');
 var FileStore = require('../stores/FileStore');
 var FileEntry = require('./FileEntry.react');
 var FolderEntry = require('./FolderEntry.react');
+var CurrentPath = require('./CurrentPath.react');
 
 function getFileState() {
     return {
         files: FileStore.getFiles(),
-        folders: FileStore.getFolders()
+        folders: FileStore.getFolders(),
+        currentPath: FileStore.getCurrentPath()
     };
 }
 
@@ -42,10 +44,13 @@ var FileBrowser = React.createClass({
         return (<FolderEntry key={folder.id} entry={folder} />)
     });
     return (
-      <section className="filelist">
-        {folders}
-        {files}
-      </section>
+        <div className="file-browser">
+            <CurrentPath path={this.state.currentPath} />  
+            <section className="filelist">
+                {folders}
+                {files}
+            </section>
+        </div>
     );
   },
 

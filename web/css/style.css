@@ -1,3 +1,11 @@
-.dirlist {
+.filelist {
 	font-family: monospace;
+}
+
+.current-path .folder-entry {
+	display: inline-block;
+}
+
+.current-path .folder-entry:after {
+	content:" / ";
 }

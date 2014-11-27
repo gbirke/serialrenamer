@@ -13,9 +13,9 @@ var FileActions = {
     });
   },
 
-  getPath: function(path) {
+  changePath: function(path) {
     AppDispatcher.handleViewAction({
-      actionType: FileConstants.GET_PATH,
+      actionType: FileConstants.FILES_CHANGE_PATH,
       path: path
     });
   }
