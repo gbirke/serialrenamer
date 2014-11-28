@@ -19,7 +19,7 @@ $app["root_path"] = "/";
 
 // services
 $app["tvdb_client"] = function($app) {
-	 if(!$app['tvdb_client']) {
+	 if(!$app['tvdb_api_key']) {
 	 	throw new \RuntimeException("TVDB_API_KEY not specified in environment!");
 	 }
 	 return new \Moinax\TvDb\Client($app["tvdb_url"], $app["tvdb_api_key"]);
@@ -57,7 +57,7 @@ $app->post("/search", function(Application $app, Request $req){
 		return $app->json(new stdClass);	
 	}
 
-	$app["session"]->set("searchresult", $app["tvdb_client"]->getSeries($q));
+	$data = $app["tvdb_client"]->getSeries($q);
 
     return $app->json($data);
 })->bind("search");
