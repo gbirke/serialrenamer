@@ -2,6 +2,10 @@
 	font-family: monospace;
 }
 
+.current-path {
+	margin-bottom:1.5em;
+}
+
 .current-path .folder-entry {
 	display: inline-block;
 }

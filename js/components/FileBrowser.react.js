@@ -44,12 +44,14 @@ var FileBrowser = React.createClass({
         return (<FolderEntry key={folder.id} entry={folder} />)
     });
     return (
-        <div className="file-browser">
-            <CurrentPath path={this.state.currentPath} />  
-            <section className="filelist">
-                {folders}
-                {files}
-            </section>
+        <div className="row">
+            <div className="col-sm-6 file-browser">
+                <CurrentPath path={this.state.currentPath} />  
+                <section className="filelist">
+                    {folders}
+                    {files}
+                </section>
+            </div>
         </div>
     );
   },
