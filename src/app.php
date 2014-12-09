@@ -52,9 +52,9 @@ $app->get('/path/{path}', function(Application $app, $path){
 
 // Search for series
 $app->post("/search", function(Application $app, Request $req){
-	$q = $req->get("q");
+	$q = trim($req->get("q"));
 	if(!$q) {
-		return $app->json(new stdClass);	
+		return $app->json(null);
 	}
 
 	$data = $app["tvdb_client"]->getSeries($q);
