@@ -27,7 +27,7 @@ var FileBrowser = React.createClass({
     },
 
     /**
-    * Event handler for 'change' events coming from the TodoStore
+    * Event handler for 'change' events coming from the FileStore
     */
     _onChange: function() {
         this.setState(getFileState());

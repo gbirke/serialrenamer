@@ -26,7 +26,6 @@ var SearchField = React.createClass({
 		        name={this.props.id}
 		        type="search"
 		        size={this.props.size}
-		        onBlur={this._save}
 		        onChange={this._onChange}
 		        onKeyDown={this._onKeyDown}
 		        value={this.state.value}
