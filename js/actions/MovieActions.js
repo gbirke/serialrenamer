@@ -27,10 +27,10 @@ var MovieActions = {
     });
   },
 
-  movieInfoLoaded: function(movieInfo) {
+  episodeInfoLoaded: function(episodeInfo) {
     AppDispatcher.handleServerAction({
-      actionType: MovieConstants.MOVIE_INFO_LOADED,
-      movies: result
+      actionType: MovieConstants.MOVIE_EPISODE_INFO_LOADED,
+      episodes: episodeInfo
     });
   }
 

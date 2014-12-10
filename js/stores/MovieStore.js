@@ -6,6 +6,8 @@ var assign         = require('object-assign');
 
 var _movies = [];
 var _currentMovie = {};
+var _episodes = {}
+var _seasons = {}
 
 function searchMovies(name) {
     var xhr = new XMLHttpRequest(),
@@ -26,7 +28,6 @@ function searchMovies(name) {
                     console.log(responseJSON);
                     return;
                 }
-                console.log(responseJSON);
                 MovieActions.handleMovieSearchResult(responseJSON);
             }
             else {
@@ -36,6 +37,63 @@ function searchMovies(name) {
         }
     };
     xhr.send(params);
+}
+
+function getEpisodes(movieId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/series/' + movieId + '/episodes', true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            var responseJSON = JSON.parse(xhr.responseText);
+            if (xhr.status == 200) {
+                if (!responseJSON) {
+                    return;
+                }
+                if (!responseJSON.episodes) {
+                    console.log("response has no episode info!");
+                    console.log(responseJSON);
+                    return;
+                }
+                MovieActions.episodeInfoLoaded(responseJSON.episodes);
+            }
+            else {
+                // TODO error handler
+                console.log(responseJSON);
+            }
+        }
+    };
+    xhr.send();
+}
+
+function storeEpisodeInfo(episodes) {
+    _episodes = {};
+    _seasons = {};
+    var id, episode, season;
+    for (id in episodes) {
+        episode = episodes[id];
+        if (episode.hasOwnProperty("season") && (typeof episode.season != "undefined") && episode.season !== null) {
+            season = episode.season;
+        }
+        else {
+            console.log("episode has no season");
+            console.log(episode);
+        }
+        _seasons[season] = "Season " + season;
+        if (!_episodes[season]) {
+            _episodes[season] = {};
+        }
+        _episodes[season][episode.id] = episode;
+    }
+}
+
+function setCurrentMovie(movieId) {
+    for(var i=0; i<_movies.length; i++) {
+        if (_movies[i].id == movieId ) {
+            _currentMovie = _movies[i];
+            return _currentMovie;
+        }
+    }
 }
 
 function setMovies(movies) {
@@ -48,6 +106,9 @@ var MovieStore = assign({}, StoreMixin, {
     },
     getCurrentMovie: function() {
         return _currentMovie;
+    },
+    getSeasons: function() {
+        return _seasons;
     }
 });
 
@@ -61,12 +122,13 @@ MovieStore.dispatchToken = AppDispatcher.register(function(payload) {
             setMovies(action.movies);
             break;
         case MovieConstants.MOVIE_SELECT:
-            console.log("TODO getMovieInfo")
-            console.log(action.movieId);
-            // TODO getMovieInfo
+            if ( setCurrentMovie(action.movieId)) {
+                getEpisodes(action.movieId);
+            }
             return true;
-        case MovieConstants.MOVIE_INFO_LOADED:
-            // TODO setCurrentMovie
+        case MovieConstants.MOVIE_EPISODE_INFO_LOADED:
+            storeEpisodeInfo(action.episodes);
+            break;
         default:
             return true;
     }

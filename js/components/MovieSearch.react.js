@@ -6,7 +6,8 @@ var MovieStore   = require('../stores/MovieStore');
 
 function getMovieState() {
 	return {
-		movies: MovieStore.getMovies()
+		movies: MovieStore.getMovies(),
+        seasons: MovieStore.getSeasons()
 	};
 }
 
@@ -34,8 +35,13 @@ var MovieSearch = React.createClass({
 	render: function() {
 
 		var movies = this.state.movies.map(function(movie){
-	        return (<MovieResult key={movie.id} value={movie.id} label={movie.name} />)
+	        return (<MovieResult key={movie.id} value={movie.id} label={movie.name} />);
 	    });
+
+        var seasonData = this.state.seasons,
+            seasons = Object.keys(seasonData).map(function(seasonId){
+            return (<option key={seasonId} value={seasonId}>{seasonData[seasonId]}</option>);
+        });
 
 		return (
 			<div className="row">
@@ -52,8 +58,7 @@ var MovieSearch = React.createClass({
 				</div>
 				<div className="col-sm-6 form-group">
 					<select size="5" name="season" id="season" className="form-control">
-						<option>Season 1</option>
-						<option>Season 2</option>
+						{seasons}
 					</select>
 				</div>
 			</div>

@@ -62,6 +62,15 @@ $app->post("/search", function(Application $app, Request $req){
     return $app->json($data);
 })->bind("search");
 
+
+// Search for episodes
+$app->get("/series/{id}/episodes", function(Application $app, $id){
+
+	$data = $app["tvdb_client"]->getSerieEpisodes($id, 'en', \Moinax\TvDb\Client::FORMAT_ZIP);
+
+    return $app->json($data);
+})->bind("getEpisodes");
+
 // Main view
 $app->get('/', function (Application $app) {
 	$info = new DirectoryInfo("", $app["root_path"]);
