@@ -1,6 +1,6 @@
 var React = require('react');
 var FileStore = require('../stores/FileStore');
-var FileEntry = require('./FileEntry.react');
+var FileRenamePreview = require('./FileRenamePreview.react');
 var FolderEntry = require('./FolderEntry.react');
 var CurrentPath = require('./CurrentPath.react');
 
@@ -37,20 +37,24 @@ var FileBrowser = React.createClass({
    * @return {object}
    */
   render: function() {
-    var files = this.state.files.map(function(file){
-        return (<FileEntry key={file.id} entry={file} />)
-    });
+    
     var folders = this.state.folders.map(function(folder){
         return (<FolderEntry key={folder.id} entry={folder} />)
     });
     return (
         <div className="row">
-            <div className="col-sm-6 file-browser">
-                <CurrentPath path={this.state.currentPath} />  
-                <section className="filelist">
-                    {folders}
-                    {files}
-                </section>
+            <div className="col-sm-3 file-browser">
+                <div className="panel panel-default">
+                    <div className="panel-body">
+                        <CurrentPath path={this.state.currentPath} />  
+                        <section className="filelist">
+                            {folders}
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div className="col-sm-9">
+                <FileRenamePreview files={this.state.files} />
             </div>
         </div>
     );
