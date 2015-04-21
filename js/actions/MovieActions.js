@@ -15,8 +15,15 @@ var MovieActions = {
 
   selectMovie: function(movieId) {
     AppDispatcher.handleViewAction({
-      actionType: MovieConstants.MOVIE_SELECT,
+      actionType: MovieConstants.MOVIE_SELECT_MOVIE,
       movieId: movieId
+    });
+  },
+
+  selectSeason: function(season) {
+    AppDispatcher.handleViewAction({
+      actionType: MovieConstants.MOVIE_SELECT_SEASON,
+      season: season
     });
   },
 

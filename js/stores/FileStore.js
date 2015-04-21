@@ -19,7 +19,7 @@ function changePath(path) {
             var responseJSON = JSON.parse(xhr.responseText);
             if (xhr.status == 200) {
                 _currentPath = path;
-                FileActions.loadFiles(responseJSON);    
+                FileActions.loadFiles(responseJSON);   
             }
             else {
                 // TODO error handler

@@ -4,7 +4,8 @@ var ReactPropTypes = React.PropTypes;
 var FileRenamePreview = React.createClass({
 
 	propTypes: {
-        files: ReactPropTypes.array.isRequired
+        files: ReactPropTypes.array.isRequired,
+        episodes: ReactPropTypes.object.isRequired
     },
 
 	render: function() {

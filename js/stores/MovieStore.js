@@ -6,8 +6,15 @@ var assign         = require('object-assign');
 
 var _movies = [];
 var _currentMovie = {};
-var _episodes = {}
-var _seasons = {}
+var _currentSeason = -1;
+var _episodes = {};
+var _seasons = {};
+
+function resetEpisodes() {
+    _episodes = {};
+    _seasons = {};
+    _currentSeason = -1;
+}
 
 function searchMovies(name) {
     var xhr = new XMLHttpRequest(),
@@ -66,10 +73,12 @@ function getEpisodes(movieId) {
     xhr.send();
 }
 
+/**
+ * Store episode info coming from the server.
+ */
 function storeEpisodeInfo(episodes) {
-    _episodes = {};
-    _seasons = {};
     var id, episode, season;
+    resetEpisodes();
     for (id in episodes) {
         episode = episodes[id];
         if (episode.hasOwnProperty("season") && (typeof episode.season != "undefined") && episode.season !== null) {
@@ -87,6 +96,9 @@ function storeEpisodeInfo(episodes) {
     }
 }
 
+/**
+ * Handle movie selection by storing it in variable
+ */
 function setCurrentMovie(movieId) {
     for(var i=0; i<_movies.length; i++) {
         if (_movies[i].id == movieId ) {
@@ -97,7 +109,12 @@ function setCurrentMovie(movieId) {
 }
 
 function setMovies(movies) {
+    resetEpisodes();
     _movies = movies;
+}
+
+function setCurrentSeason(season) {
+    _currentSeason = season;
 }
 
 var MovieStore = assign({}, StoreMixin, {
@@ -109,6 +126,14 @@ var MovieStore = assign({}, StoreMixin, {
     },
     getSeasons: function() {
         return _seasons;
+    },
+    getEpisodesForCurrentSeason: function() {
+        if (_episodes && _episodes[_currentSeason]) {
+            return _episodes[_currentSeason];    
+        }
+        else {
+            return {};
+        }
     }
 });
 
@@ -121,11 +146,14 @@ MovieStore.dispatchToken = AppDispatcher.register(function(payload) {
         case MovieConstants.MOVIE_SEARCH_RESULT:
             setMovies(action.movies);
             break;
-        case MovieConstants.MOVIE_SELECT:
+        case MovieConstants.MOVIE_SELECT_MOVIE:
             if ( setCurrentMovie(action.movieId)) {
                 getEpisodes(action.movieId);
             }
             return true;
+        case MovieConstants.MOVIE_SELECT_SEASON:
+            setCurrentSeason(action.season);
+            break;
         case MovieConstants.MOVIE_EPISODE_INFO_LOADED:
             storeEpisodeInfo(action.episodes);
             break;

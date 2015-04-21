@@ -56,7 +56,7 @@ var MovieSearch = React.createClass({
 						{movies}
 					</select>
 				</div>
-				<div className="col-sm-6 form-group">
+				<div className="col-sm-6 form-group" onChange={this._onSeasonSelect}>
 					<select size="5" name="season" id="season" className="form-control">
 						{seasons}
 					</select>
@@ -78,6 +78,12 @@ var MovieSearch = React.createClass({
 			MovieActions.selectMovie(movieId);
 		}
 
+	},
+
+	_onSeasonSelect: function(event) {
+		var sel = event.target,
+			season = sel.options[sel.selectedIndex].value;
+		MovieActions.selectSeason(season);
 	}
 
 });

@@ -1,5 +1,6 @@
 var React = require('react');
 var FileStore = require('../stores/FileStore');
+var MovieStore = require('../stores/MovieStore');
 var FileRenamePreview = require('./FileRenamePreview.react');
 var FolderEntry = require('./FolderEntry.react');
 var CurrentPath = require('./CurrentPath.react');
@@ -8,7 +9,8 @@ function getFileState() {
     return {
         files: FileStore.getFiles(),
         folders: FileStore.getFolders(),
-        currentPath: FileStore.getCurrentPath()
+        currentPath: FileStore.getCurrentPath(),
+        episodes: MovieStore.getEpisodesForCurrentSeason()
     };
 }
 
@@ -20,10 +22,12 @@ var FileBrowser = React.createClass({
 
     componentDidMount: function() {
         FileStore.addChangeListener(this._onChange);
+        MovieStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function() {
         FileStore.removeChangeListener(this._onChange);
+        MovieStore.removeChangeListener(this._onChange);
     },
 
     /**
@@ -54,7 +58,7 @@ var FileBrowser = React.createClass({
                 </div>
             </div>
             <div className="col-sm-9">
-                <FileRenamePreview files={this.state.files} />
+                <FileRenamePreview files={this.state.files} episodes={this.state.episodes} />
             </div>
         </div>
     );
