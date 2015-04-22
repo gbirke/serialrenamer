@@ -127,6 +127,14 @@ var MovieStore = assign({}, StoreMixin, {
     getSeasons: function() {
         return _seasons;
     },
+    getEpisodesForSeason: function(season) {
+        if (_episodes && _episodes[season]) {
+            return _episodes[season];    
+        }
+        else {
+            return {}; // Throw exception instead?
+        }
+    },
     getEpisodesForCurrentSeason: function() {
         if (_episodes && _episodes[_currentSeason]) {
             return _episodes[_currentSeason];    

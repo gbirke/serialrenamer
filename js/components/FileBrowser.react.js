@@ -1,6 +1,7 @@
 var React = require('react');
 var FileStore = require('../stores/FileStore');
 var MovieStore = require('../stores/MovieStore');
+var MatchStore = require('../stores/MatchStore')
 var FileRenamePreview = require('./FileRenamePreview.react');
 var FolderEntry = require('./FolderEntry.react');
 var CurrentPath = require('./CurrentPath.react');
@@ -10,7 +11,8 @@ function getFileState() {
         files: FileStore.getFiles(),
         folders: FileStore.getFolders(),
         currentPath: FileStore.getCurrentPath(),
-        episodes: MovieStore.getEpisodesForCurrentSeason()
+        episodes: MovieStore.getEpisodesForCurrentSeason(),
+        fileMatches: MatchStore.getMatches()
     };
 }
 
