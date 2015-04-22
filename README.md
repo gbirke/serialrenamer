@@ -4,7 +4,7 @@ The Serial Renamer
 Web-based TV series renamer using theTVDB
 
 ## Installation
-You must have (composer)[http://getcomposer.org/] installed to run this app.
+You must have [composer](http://getcomposer.org/) installed to run this app.
 
 After downloading and extracting the source, run 
 
