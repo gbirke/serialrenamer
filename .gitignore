@@ -39,3 +39,6 @@ npm-debug.log
 
 # ignore compiled js library
 /web/js/app.js
+
+# Environment configuration
+.env
