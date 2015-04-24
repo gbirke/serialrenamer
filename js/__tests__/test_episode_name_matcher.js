@@ -69,5 +69,20 @@ describe('EpisodeNameMatcher', function() {
 		expect(result).toEqual({"my/The Simpsons - Bart Star - 320p.mkv": "1"});
 	});
 
+	it('truncates episode names that are too long', function() {
+		var EpisodeNameMatcher = require('../matchers/EpisodeNameMatcher');
+		EpisodeNameMatcher.fuseMaxPatternLength = 16;
+		var files = [
+			{id:"my/VeryLongFileName.mkv", name:"VeryLongFileName.mkv", type:"f"},
+			{id:"my/AnotherLongFileName.mkv", name:"AnotherLongFileName.mkv", type:"f"},
+		];
+		var episodes = {
+			"1": {id: "1", name: "VeryLongFileName With Extra Words That Will Be Truncated"}
+		};
+
+		var result = EpisodeNameMatcher.match(files, episodes);
+		expect(result).toEqual({"my/VeryLongFileName.mkv": "1"});
+	});
+
 
 });
