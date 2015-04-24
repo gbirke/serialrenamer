@@ -35,3 +35,4 @@ This app is still in development and does not have the full functionality. The f
 ## Future Improvements
 - Search theTVDB in the background based on the currently selected folder name.
 - Custom rename patterns
+- Replace PHP app with node.js to get an isomorphic app

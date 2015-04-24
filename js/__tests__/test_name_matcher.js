@@ -13,7 +13,7 @@ describe('EpisodeNameMatcher', function() {
 			"1": {id: "1", name: "Bar"}
 		};
 		var result = EpisodeNameMatcher.match(files, episodes);
-		expect(result).toEqual({"my/Bar.mkv":"1"});	
+		expect(result).toEqual({"my/Bar.mkv":"1"});
 	});
 
 	it('matches multiple episodes', function() {
@@ -30,12 +30,30 @@ describe('EpisodeNameMatcher', function() {
 		};
 		var result = EpisodeNameMatcher.match(files, episodes);
 		expect(result).toEqual(
-			{ 
+			{
 				"my/Bar.mkv": "1",
 				"my/Baz.mkv": "2",
 				"my/Foo.mkv": "3",
 			}
-		);	
+		);
+	});
+
+	it('returns the best match when there are more episodes than files', function() {
+		var EpisodeNameMatcher = require('../matchers/EpisodeNameMatcher');
+		var files = [
+			{id:"my/Bar.mkv", name:"Bar.mkv", type:"f"}
+		];
+		var episodes = {
+			"1": {id: "1", name: "Bar"},
+			"2": {id: "2", name: "Baz"},
+			"3": {id: "3", name: "Foo"}
+		};
+		var result = EpisodeNameMatcher.match(files, episodes);
+		expect(result).toEqual(
+			{
+				"my/Bar.mkv": "1"
+			}
+		);
 	});
 
 	it('matches episode name with additional info', function() {
@@ -48,7 +66,7 @@ describe('EpisodeNameMatcher', function() {
 			"1": {id: "1", name: "Bart Star"}
 		};
 		var result = EpisodeNameMatcher.match(files, episodes);
-		expect(result).toEqual({"my/The Simpsons - Bart Star - 320p.mkv": "1"});	
+		expect(result).toEqual({"my/The Simpsons - Bart Star - 320p.mkv": "1"});
 	});
 
 
