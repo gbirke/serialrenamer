@@ -1,24 +1,41 @@
-"use strict";
-
 var Fuse = require('fuse.js');
+
+function MatchHelper(files) {
+	this.episodeFiles = {};
+	this.episodeScores = {};
+	var fuseOptions = {
+			keys: ["name"],
+			id: "id",
+			includeScore: true
+		};
+	this.fuse = new Fuse(files, fuseOptions);
+}
+
+MatchHelper.prototype.matchEpisode = function(episode) {
+	var matches = this.fuse.search(episode.name),
+		fileId, fileScore;
+	if (!matches || matches.length < 1) {
+		return;
+	}
+	fileId = matches[0].item;
+	fileScore = matches[0].score;
+	if (this.scoreForFileIsBetter(fileId, fileScore)) {
+		this.episodeScores[fileId] = fileScore;
+		this.episodeFiles[fileId] = episode.id;
+	}
+};
+
+MatchHelper.prototype.scoreForFileIsBetter = function(fileId, fileScore) {
+	return !(fileId in this.episodeScores) || this.episodeScores[fileId] > fileScore;
+};
 
 var EpisodeNameMatcher = {
 	match: function(files, episodes) {
-		var episodeFiles = {},
-			fuseOptions = {
-				keys: ["name"], 
-				id: "id",
-				includeScore: true
-			},
-			f = new Fuse(files, fuseOptions),
-			e, bestMatches;
-		for (e in episodes) {
-			bestMatches = f.search(episodes[e].name);
-			if (bestMatches && bestMatches.length > 0) {
-				episodeFiles[bestMatches[0].item] = e;
-			}
+		var matcher = new MatchHelper(files);		
+		for (var e in episodes) {
+			matcher.matchEpisode(episodes[e]);
 		}
-		return episodeFiles;
+		return matcher.episodeFiles;
 	},
 	
 };
