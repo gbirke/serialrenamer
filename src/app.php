@@ -5,6 +5,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Moinax\TvDb;
 use Dotenv;
 
 $app = new Application();
@@ -17,16 +18,22 @@ Dotenv::required('TVDB_API_KEY');
 $app["debug"] = (boolean) getenv("DEBUG");
 $app["tvdb_url"] = "http://thetvdb.com";
 $app["tvdb_api_key"] = getenv("TVDB_API_KEY");
+$app["tvdb_cache_ttl"] = 3600; //Cache requests for 1 hour
+$app["tvdb_cache_dir"] = dirname(__DIR__) . "/var/cache";
 
 // Starting folder, must always end with "/"
 $app["root_path"] = getenv("ROOT") ?: "/";
 
 // services
 $app["tvdb_client"] = function($app) {
-	 if(!$app['tvdb_api_key']) {
+	if(!$app['tvdb_api_key']) {
 	 	throw new \RuntimeException("TVDB_API_KEY not specified in environment!");
-	 }
-	 return new \Moinax\TvDb\Client($app["tvdb_url"], $app["tvdb_api_key"]);
+	}
+	$cache = new TvDb\Http\Cache\FilesystemCache($app["tvdb_cache_dir"]);
+	$httpClient = new TvDb\Http\CacheClient($cache, $app["tvdb_cache_ttl"]);
+	$tvdb = new TvDb\Client($app["tvdb_url"], $app["tvdb_api_key"]);
+	$tvdb->setHttpClient($httpClient);
+	return $tvdb;
 };
 
 // Service providers

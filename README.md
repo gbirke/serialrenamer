@@ -27,12 +27,13 @@ For the program to work, you must register with theTVDB and get an API key and s
 ## TODO
 This app is still in development and does not have the full functionality. The following parts still have to be developed:
 
-- Cache theTVDB requests
+- "All" button for seasons as default selection and matching criterion
 - Search theTVDB in the background based on the currently selected folder name.
 - Configurable rename pattern as class
 - Rename action in PHP code
+- Switch between DVD season and aired season
 
-## Future Improvements
+### Future Improvements
 - Interface for manually assigning episode info in case the matcher got it wrong
 - Input field for rename pattern
 - Replace PHP app with node.js to get an isomorphic app
