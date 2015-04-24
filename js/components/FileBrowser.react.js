@@ -1,7 +1,7 @@
 var React = require('react');
 var FileStore = require('../stores/FileStore');
 var MovieStore = require('../stores/MovieStore');
-var MatchStore = require('../stores/MatchStore')
+var MatchStore = require('../stores/MatchStore');
 var FileRenamePreview = require('./FileRenamePreview.react');
 var FolderEntry = require('./FolderEntry.react');
 var CurrentPath = require('./CurrentPath.react');
@@ -25,11 +25,13 @@ var FileBrowser = React.createClass({
     componentDidMount: function() {
         FileStore.addChangeListener(this._onChange);
         MovieStore.addChangeListener(this._onChange);
+        MatchStore.addChangeListener(this._onChange);
     },
 
     componentWillUnmount: function() {
         FileStore.removeChangeListener(this._onChange);
         MovieStore.removeChangeListener(this._onChange);
+        MatchStore.removeChangeListener(this._onChange);
     },
 
     /**
@@ -43,7 +45,7 @@ var FileBrowser = React.createClass({
    * @return {object}
    */
   render: function() {
-    
+
     var folders = this.state.folders.map(function(folder){
         return (<FolderEntry key={folder.id} entry={folder} />)
     });
@@ -52,7 +54,7 @@ var FileBrowser = React.createClass({
             <div className="col-sm-3 file-browser">
                 <div className="panel panel-default">
                     <div className="panel-body">
-                        <CurrentPath path={this.state.currentPath} />  
+                        <CurrentPath path={this.state.currentPath} />
                         <section className="filelist">
                             {folders}
                         </section>
@@ -60,7 +62,11 @@ var FileBrowser = React.createClass({
                 </div>
             </div>
             <div className="col-sm-9">
-                <FileRenamePreview files={this.state.files} episodes={this.state.episodes} />
+                <FileRenamePreview
+                    files={this.state.files}
+                    episodes={this.state.episodes}
+                    matches={this.state.fileMatches}
+                    />
             </div>
         </div>
     );

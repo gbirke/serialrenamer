@@ -1,5 +1,7 @@
 var MovieConstants = require('../constants/MovieConstants');
 var AppDispatcher  = require('../dispatcher/AppDispatcher');
+var NameMatcher    = require('../matchers/EpisodeNameMatcher');
+var NumberMatcher  = require('../matchers/EpisodeNumberMatcher');
 var FileStore      = require('./FileStore');
 var MovieStore     = require('./MovieStore');
 var StoreMixin     = require('./StoreMixin');
@@ -18,22 +20,17 @@ function resetFiles() {
 
 function seasonSelect(season) {
     var files = FileStore.getFiles(),
-        episodeFiles = {} // episodeFiles holds episode_id => [file_ids]
-    ; 
-    // TODO check file name for S01E07 patterns. If those patterns exist for the majority of files, build _matches and return
-
-    // TODO If there is no pattern, use fuse.js fuzzy matching on the file name as follows:
-    //      1. for each episode, use it as a search pattern for files, append the best match to episodeFiles
-    //      2. build _matches from episodeFiles 
-
-    // Just some testing stuff
-	console.log("react to seasonSelect in MatchStore ")
-	console.log(MovieStore.getEpisodesForSeason(season));
-	console.log(_matches);
-} 
+        episodes = MovieStore.getEpisodesForSeason(season)
+        ;
+    _matches = assign(
+        {},
+        NameMatcher.match(files, episodes),
+        NumberMatcher.match(files, episodes)
+    );
+}
 
 
-/** 
+/**
  * The MatchStore stores the filename => episode id assignments.
  * It tries automatic matching whenever a season is selected
  */
@@ -60,5 +57,5 @@ MatchStore.dispatchToken = AppDispatcher.register(function(payload) {
 });
 
 
-module.exports = MatchStore; 
+module.exports = MatchStore;
 
