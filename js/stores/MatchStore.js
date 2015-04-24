@@ -4,7 +4,6 @@ var FileStore      = require('./FileStore');
 var MovieStore     = require('./MovieStore');
 var StoreMixin     = require('./StoreMixin');
 var assign         = require('object-assign');
-var Fuse           = require('fuse.js');
 
 var _matches = {};
 
